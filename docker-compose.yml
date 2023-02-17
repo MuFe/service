@@ -1,0 +1,80 @@
+version: "3"
+services:
+  xliyu_web:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/home:latest
+    environment:
+      - SERVICE_443_NAME=home_web_https
+      - SERVICE_80_NAME=home_web_http
+    ports:
+      - "30444:443"
+      - "30442:80"
+    networks:
+      - micro
+
+
+  xliyu_web_init:
+    container_name: xliyu_web_init
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/mufe:init
+    env_file:
+      - .env
+    environment:
+      - HTTPS_NAME=home_web_https
+      - HTTP_NAME=home_web_http
+    networks:
+      - micro
+
+  web_admin_web:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/web_admin:latest
+    environment:
+      - SERVICE_443_NAME=web_admin_https
+      - SERVICE_80_NAME=web_admin_http
+    ports:
+      - "40444:443"
+      - "40442:80"
+    networks:
+      - micro
+
+  web_admin_init:
+    container_name: web_admin_init
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/mufe:init
+    env_file:
+      - .env
+    environment:
+      - HTTPS_NAME=web_admin_https
+      - HTTP_NAME=web_admin_http
+    networks:
+      - micro
+
+  brand_admin_web:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/brand_admin:latest
+    environment:
+      - SERVICE_443_NAME=brand_admin_https
+      - SERVICE_80_NAME=brand_admin_http
+    ports:
+      - "50444:443"
+      - "50442:80"
+    networks:
+      - micro
+
+  brand_admin_init:
+    container_name: brand_admin_init
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/mufe:init
+    env_file:
+      - .env
+    environment:
+      - HTTPS_NAME=brand_admin_https
+      - HTTP_NAME=brand_admin_http
+    networks:
+      - micro
+
+
+
+
+networks:
+  micro:
+    external:
+      name: mufe_service_micro
+
+
+
+

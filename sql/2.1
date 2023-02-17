@@ -1,0 +1,12 @@
+2022-6-24
+ALTER TABLE qz_user ADD COLUMN registration_id VARCHAR(255) DEFAULT '' COMMENT '极光注册id' AFTER age;
+
+CREATE TABLE `qz_search_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `content` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `modify_time` bigint NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `uid` int NOT NULL DEFAULT '0',
+  `number` int NOT NULL DEFAULT '0' COMMENT '搜索次数',
+  `today_number` int NOT NULL DEFAULT '0' COMMENT '今天的搜索次数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

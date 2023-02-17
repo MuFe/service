@@ -1,0 +1,208 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service GoodCategoryService {
+    rpc good_category (GetGoodCategoryRequest) returns (GetGoodCategoryResponse);
+    rpc edit_good_category (EditGoodCategoryRequest) returns (EmptyResponse);
+    rpc edit_good_category_status (EditGoodCategoryStatusRequest) returns (EmptyResponse);
+
+}
+
+
+message GetGoodCategoryRequest {
+    int64 type = 1;
+    repeated int64 category_id_list = 2;
+    repeated int64 parent_category_id_list = 3;
+    repeated int64 second_category_id_list = 4;
+    int64 channel = 5;
+    int64 business_id = 6;
+    int64 business_group_id = 7;
+    int64 level = 8;
+}
+
+service GoodDeliveryService {
+    rpc get_delivery_template (DeliveryListRequest) returns (DeliveryListResponse);
+    rpc edit_delivery_template (EditDeliveryListRequest) returns (DeliveryListResponse);
+    rpc del_delivery_template (DelDeliveryRequest) returns (EmptyResponse);
+}
+
+service GoodService {
+    rpc edit_good (EditGoodRequest) returns (EditGoodResponse);
+    rpc good_detail (GoodDetailRequest) returns (GoodDetailResponse);
+    rpc getOrderSkuList (getOrderSkuListRequest) returns (getOrderSkuListResponse);
+    rpc get_sku_id_query (getSkuIdQueryRequest) returns (getSkuIdQueryResponse);
+    rpc getSkuOptions (getSkuOptionsRequest) returns (getSkuOptionsResponse);
+    rpc getSpuList (getSpuListRequest) returns (getSpuListResponse);
+}
+
+
+message GetGoodCategoryResponse {
+    repeated good_category list = 1;
+}
+
+message good_category {
+    int64 id = 1;
+    string name = 2;
+    int64 level = 3;
+    int64 shop_spc_num = 4;
+    int64 wholes_spc_num = 5;
+    int64 tm_spc_num = 6;
+    repeated good_category children = 7;
+    repeated good_specifications_info specs = 8;
+}
+
+
+message EditGoodCategoryRequest {
+    int64 uid = 1;
+    string name = 2;
+    int64 p_id = 3;
+    int64 id = 4;
+    int64 level = 5;
+    repeated good_specifications_info list = 6;
+}
+
+message EditGoodCategoryStatusRequest {
+    repeated int64 id = 1;
+    int64 status = 2;
+}
+
+
+
+
+
+message DeliveryListRequest {
+    int64 business_id = 1;
+    repeated int64 id = 2;
+    int64 spu_id = 3;
+}
+
+message DeliveryListResponse {
+    repeated DeliveryData list = 1;
+}
+
+
+message EditDeliveryListRequest {
+    int64 business_id = 1;
+    int64 uid = 2;
+    DeliveryData data=3;
+}
+
+message DelDeliveryRequest {
+    int64 id = 1;
+    int64 business_id = 2;
+    int64 uid = 3;
+}
+
+
+
+message EditGoodRequest {
+    int64 spu_id = 1;
+    int64 type = 2;
+    int64 sale_time = 3; //上架时间
+    string location = 4;
+    string spu_name = 5;
+    int64 category_id = 6;
+    string detail = 7;
+    bool is_draft = 8; //是否草稿
+    repeated Sku infos = 9;
+    int64 status = 10;
+    string prefix = 11;
+    repeated GoodQiniuPhoto photos = 12;
+    repeated GoodQiniuPhoto temp_photos = 13;
+    repeated DeliveryData delivery=14;  //配送选择
+    int64 uid=15;
+    int64 business_id=16;
+}
+
+message GoodQiniuPhoto {
+    string key = 1;
+    string prefix = 2;
+    int64 status = 3;
+    int64 type=4;
+}
+
+message EditGoodResponse{
+    int64 spu_id=1;
+}
+
+
+message GoodDetailRequest {
+    int64 sku_id = 1;
+    int64 spu_id = 2;
+    int64 business_group_id = 3;
+    int64 sku_status = 4;
+}
+
+message GoodDetailResponse {
+    int64 spu_id = 1;
+    string spu_name = 2;
+    repeated DeliveryData delivery_info = 3;
+    int64 status = 4;
+    string location = 5;
+    int64 category_id = 6;
+    int64 parent_category_id = 7;
+    string detail = 8;
+    repeated PhotoInfo photos = 9;
+    repeated Sku list = 10;
+    string status_message = 11;
+    string spu_number = 12;
+    int64 comment_num = 13;
+    int64 business_id = 15;
+    int64 stock = 16;
+}
+
+message getOrderSkuListRequest {
+    map<int64, int64> data = 1;
+}
+
+message getOrderSkuListResponse {
+    repeated getSubOrderData list = 1;
+}
+
+message getSubOrderData {
+    int64 seller_id = 1; //出售人id
+    map<int64, int64> shop_deliver_price_map = 2;
+    repeated getSubOrderDetailData list = 3;
+}
+
+message getSubOrderDetailData {
+    int64 sku_id = 1;
+    int64 num = 2;
+    int64 agreement_price = 3;
+    int64 price = 4;
+    int64 member_price = 5;
+    int64 cost_price = 6;
+    int64 spu_id = 7;
+}
+
+
+message getSkuIdQueryRequest {
+    string query = 1;
+    repeated int64 brand_list = 2;
+}
+
+message getSkuIdQueryResponse {
+    repeated int64 list = 1;
+}
+message getSkuOptionsRequest {
+    repeated int64 spu_id_list = 1;
+    repeated int64 sku_id_list = 2;
+}
+
+message getSkuOptionsResponse {
+    map<int64, GetSkuOptions> result = 1;
+}
+
+message GetSkuOptions {
+    repeated SkuOption list = 1;
+}
+
+message getSpuListRequest {
+    repeated int64 list = 1;
+}
+
+message getSpuListResponse {
+    repeated Spu list = 1;
+}
+
+

@@ -1,0 +1,152 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service  HomeWorkService {
+    //检查通道连接
+    rpc homeWorkInfo(HomeWorkRequest) returns(HomeWorkResponse);
+    rpc homeWork(HomeWorkRequest) returns(HomeWorkResponse);
+    rpc edit_homeWork(EditHomeWorkRequest) returns(EditHomeWorkResponse);
+    rpc homeWorkDetail(HomeWorkDetailRequest) returns(HomeWorkData);
+    rpc edit_homework_info(EditHomeWorkInfoRequest) returns(EmptyResponse);
+
+
+
+    rpc unbind_homeWork(UnBindHomeWorkRequest) returns(EmptyResponse);
+    rpc finish_homeWork(FinishHomeWorkRequest) returns(EmptyResponse);
+
+    rpc add_homeWork(AddHomeWorkRequest) returns(EmptyResponse);
+    rpc home_work_list(HomeWorkListRequest) returns(HomeWorkListResponse);
+    rpc home_work_group(HomeWorkListRequest) returns(HomeWorkGroupResponse);
+    rpc home_work_record(HomeWorkRecordRequest) returns(HomeWorkRecordResponse);
+    rpc cancel_home_work(CancelHomeWorkRequest) returns(EmptyResponse);
+}
+
+message HomeWorkRequest{
+    int64 page=1;
+    int64 size=2;
+    int64 status=3;
+    repeated int64 content_id=4;
+}
+
+
+
+message HomeWorkResponse{
+    repeated HomeWorkData list=1;
+}
+
+message HomeWorkData{
+    int64 id=1;
+    int64 index=2;
+    string title=3;
+    string cover=6;
+    string content=7;
+    string video=4;
+    int64 content_id=5;
+    repeated TagData tag=8;
+    int64 info_id=9;
+    int64 level=10;
+}
+
+message UnBindHomeWorkRequest{
+   int64 id=1;
+}
+
+message AddHomeWorkRequest{
+    repeated int64 ids=1;
+    repeated int64 classIds=2;
+    int64 time=3;
+    string desc=4;
+    int64 uid=5;
+}
+
+message EditHomeWorkRequest{
+    string title=1;
+    repeated int64 tag=2;
+    int64 id=3;
+    int64 level=4;
+}
+
+
+message HomeWorkListRequest{
+    int64 class_id=1;
+    int64 time=2;
+    int64 uid=3;
+    int64 id=4;
+}
+
+
+
+
+
+message HomeWorkListResponse{
+    repeated HomeWorkListData list=1;
+}
+
+message HomeWorkGroupResponse{
+    string desc=1;
+    repeated HomeWorkListData list=2;
+    int64 group_id=3;
+}
+
+message HomeWorkListData{
+    int64 id=1;
+    string title=2;
+    int64 index=3;
+    int64 time=4;
+    int64 number=5;
+    double progress=6;
+    string cover=7;
+    int64 info=8;
+}
+
+message HomeWorkRecordRequest{
+    int64 id=1;
+}
+
+message HomeWorkRecordResponse{
+    repeated HomeWorkRecordData incomplete=1;
+    repeated HomeWorkRecordData finish=2;
+}
+
+
+message HomeWorkRecordData{
+    int64 uid=1;
+}
+
+message HomeWorkLevelRequest{
+    int64 id=1;
+    string title=2;
+}
+
+message HomeWorkLevelResponse{
+    repeated HomeWorkLevelData list=1;
+}
+
+message HomeWorkLevelData{
+    int64 id=1;
+    string title=2;
+}
+
+message EditHomeWorkInfoRequest{
+    int64 id=1;
+    string content=2;
+    string prefix=3;
+    int64 type=4;
+}
+message EditHomeWorkResponse{
+    int64 id=1;
+}
+message HomeWorkDetailRequest{
+    int64 id=1;
+    int64 info_id=2;
+}
+
+message FinishHomeWorkRequest{
+    int64 uid=1;
+    int64 id=2;
+    int64 score=3;
+}
+
+message CancelHomeWorkRequest{
+    repeated int64 list=1;
+}

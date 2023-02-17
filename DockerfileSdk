@@ -1,0 +1,14 @@
+FROM registry.cn-guangzhou.aliyuncs.com/mufe/golang:1.17.8 AS builder
+
+WORKDIR $GOPATH/src/mufe_service
+
+ENV  GO111MODULE=off
+
+COPY ./jsonRpc ./jsonRpc
+COPY ./vendor ./vendor
+COPY ./model ./model
+COPY ./camp ./camp
+COPY ./api ./api
+COPY ./manager ./manager
+COPY ./service ./service
+

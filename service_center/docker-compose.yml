@@ -1,0 +1,136 @@
+version: "3"
+
+services:
+
+  nginx_web:
+    container_name: mufe_service_nginx_web
+    image:  registry.cn-guangzhou.aliyuncs.com/mufe/nginx:nginx
+    volumes:
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf"
+      #      - "./port.pem:/etc/nginx/port.pem"
+      #      - "./port.key:/etc/nginx/port.key"
+      - "./web_https.conf:/usr/local/nginx/servers/servers_web_https.conf"
+      - "./web_http.conf:/usr/local/nginx/servers/servers_web_http.conf"
+      - "./web_admin_https.conf:/usr/local/nginx/servers/servers_web_admin_https.conf"
+      - "./web_admin_http.conf:/usr/local/nginx/servers/servers_web_admin_http.conf"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - micro
+
+  kong_migrations: # 构建kong数据库,这个镜像和下面的镜像是一样的
+    image: kong
+    container_name: mufe_service_kong_migrations
+    command: kong migrations up
+#    command: kong migrations bootstrap
+    depends_on:
+      - kong_database
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=172.28.1.4
+      - KONG_CASSANDRA_CONTACT_POINTS=172.28.1.4
+      - KONG_PG_USER=kong
+      - KONG_PG_DATABASE=kong
+      - KONG_PG_PASSWORD=kong
+    networks:
+      - micro
+
+  kong: # kong网关服务
+    image: kong
+    hostname: kong
+    container_name: mufe_service_kong
+    #    volumes:
+    #       - "./port.pem:/usr/local/kong/ssl/kong-default.crt"
+    #       - "./port.key:/usr/local/kong/ssl/kong-default.key"
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=172.28.1.4
+      - KONG_CASSANDRA_CONTACT_POINTS=172.28.1.4
+      - KONG_PG_USER=kong
+      - KONG_PG_DATABASE=kong
+      - KONG_PG_PASSWORD=kong
+      - KONG_DNS_RESOLVER=172.28.1.3:8600
+      - KONG_ADMIN_LISTEN=0.0.0.0:8001
+    depends_on:
+      - kong_migrations
+      - kong_database
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    networks:
+      - micro
+
+  kong_dashboard: # kong管理面板
+    image: pantsel/konga:next
+    container_name: mufe_service_kong_dashboard
+    environment:
+      - TOKEN_SECRET=micro
+      - NODE_ENV=development
+      - DB_ADAPTER=postgres
+      - DB_HOST=kong_database
+      - DB_USER=kong
+      - DB_PASSWORD=kong
+      - DB_DATABASE=kong
+    depends_on:
+      - kong
+    ports:
+      - 1337:1337
+    networks:
+      - micro
+
+  kong_database: # kong数据库 采用的postgres
+    image: postgres:9.6
+    restart: always
+    privileged: true
+    hostname: kong_database
+    container_name: mufe_service_kong_database
+    environment:
+      - POSTGRES_USER=kong
+      - POSTGRES_DB=kong
+      - POSTGRES_PASSWORD=kong
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data/pgdata
+    networks:
+      micro:
+        ipv4_address: 172.28.1.4
+
+
+  service_center:
+    image: consul
+    hostname: service_center
+    container_name: mufe_service_service_center
+    ports:
+      - 8500:8500
+      - 8600:8600
+      - 8300:8300
+    networks:
+      micro:
+        ipv4_address: 172.28.1.3
+
+
+  mufe_service_registrator:
+    image: gliderlabs/registrator:master
+    hostname: registrator
+    container_name: mufe_service_registrator
+    network_mode: host
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+    command: -ip=192.168.0.107 consul://172.28.1.3:8500
+
+networks:
+  micro:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.1.0/16
+#          gateway: 172.28.1.1
+
+
+
+

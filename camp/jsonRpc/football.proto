@@ -1,0 +1,67 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service FootballService {
+    //检查通道连接
+    rpc getData(GetFootDataRequest) returns (GetDataResponse);
+    rpc getFoot(GetFootRequest) returns (GetDataResponse);
+    rpc bind(BindFootRequest) returns (EmptyResponse);
+    rpc unbind(BindFootRequest) returns (EmptyResponse);
+    rpc getSchool(FootBallSchoolRequest) returns (FootBallSchoolResponse);
+    rpc getFootBallData(GetFootBallRequest) returns (GetFootBallResponseData);
+}
+
+message  GetFootDataRequest{
+    repeated GetFootData list=1;
+}
+
+message GetFootData{
+    string mac=1;
+    string date=2;
+}
+
+message GetDataResponse{
+    repeated GetDataResult list=1;
+}
+
+message GetDataResult{
+    string mac=1;
+    int64 score=2;
+    double duration=3;
+    int64 uid=4;
+    string date=5;
+}
+
+message GetFootRequest{
+    repeated int64 uid=1;
+}
+
+message BindFootRequest{
+    int64 uid=1;
+    string mac=2;
+}
+
+message FootBallSchoolRequest{
+    int64 uid=1;
+    int64 type=2;
+}
+
+message FootBallSchoolResponse{
+    int64 school_id=1;
+}
+
+message GetFootBallRequest{
+    int64 start=1;
+    int64 end=2;
+    repeated  int64 uid=3;
+}
+
+message GetFootBallResponse{
+    repeated GetFootBallResponseData list=1;
+}
+
+message GetFootBallResponseData{
+    int64 uid=1;
+    int64 score=2;
+    double duration=3;
+}

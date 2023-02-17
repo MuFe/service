@@ -1,0 +1,22 @@
+REATE TABLE `qz_area_use` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uid` int NOT NULL COMMENT '用户id',
+  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1为正常用户，2为后台用户',
+  `school_id` int NOT NULL COMMENT '学校id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='区域查看智能足球用户权限表';
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `qz_football_data` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `mac` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '足球mac',
+  `duration` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '时长',
+  `number` int NOT NULL COMMENT '次数',
+   `time` bigint NOT NULL COMMENT '创建时间戳',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='足球数据表';
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE qz_football add create_time INT NOT NULL DEFAULT '0';

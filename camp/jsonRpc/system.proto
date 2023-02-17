@@ -1,0 +1,35 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+
+service FeedbackService {
+    //检查通道连接
+    rpc add_feedback(FeedbackRequest) returns(EmptyResponse);
+    rpc feedback_list(FeedbackRequest) returns(FeedbackResponse);
+    rpc edit_feedback(FeedbackRequest) returns(EmptyResponse);
+}
+
+
+
+
+message FeedbackRequest{
+    string content=1;
+    int64 uid=2;
+    int64 status=3;
+    int64 id=4;
+}
+
+message FeedbackData{
+    string content=1;
+    int64 uid=2;
+    int64 id=3;
+    int64 create_time=4;
+    string name=5;
+}
+
+message FeedbackResponse{
+    repeated FeedbackData list=1;
+}
+
+
+

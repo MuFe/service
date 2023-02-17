@@ -1,0 +1,27 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service SearchService {
+    //检查通道连接
+    rpc addSearch (SearchRequest) returns (EmptyResponse);
+    rpc getSearchHistory (SearchRequest) returns (SearchResponse);
+    rpc searchHint (SearchRequest) returns (SearchResponse);
+}
+
+message SearchRequest {
+    string content = 1;
+    int64 uid = 2;
+}
+
+message SearchResponse {
+    repeated SearchData list = 1;
+    repeated SearchData hot = 2;
+}
+
+
+message SearchData {
+    int64 id = 1;
+    int64 today_number = 2;
+    int64 number = 3;
+    string content = 4;
+}

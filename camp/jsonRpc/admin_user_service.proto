@@ -1,0 +1,120 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service AdminUserService {
+    //检查通道连接
+    rpc login(AdminLoginRequest) returns(AdminUserDataResponse);
+    rpc brand_login(AdminLoginRequest) returns(AdminUserDataResponse);
+    rpc getBrandGoodCategory (getBrandGoodCategoryRequest) returns (getBrandGoodCategoryResponse);
+    rpc get_commitment (EmptyRequest) returns (getCommitmentResponse); //获取承诺-服务
+}
+
+service AdminPermissionService {
+    rpc checkUserGroupPermission (checkUserGroupPermissionRequest) returns (EmptyResponse);
+    rpc checkUserPermission (checkGroupPermissionRequest) returns (EmptyResponse);
+    rpc getUserPagePermission (getUserPagePermissionRequest) returns (PagePermissionResponse);
+    rpc getPermissionGroup (getPermissionGroupRequest) returns (getPermissionGroupResponse);
+    rpc deleteUserPermission (deleteUserPermissionRequest) returns (EmptyResponse);
+}
+
+message AdminLoginRequest{
+    string phone=1;
+    string pass=2;
+    int64 bgID = 3; // 商家组信息id，用于区分登录什么平台
+}
+
+message AdminUserDataResponse {
+    string name = 1;
+    string head = 2;
+    string phone = 3;
+    int64 uid = 4;
+    int64 business_id=5;
+    string no=6;
+    string user_group_name=7;
+    int64 user_group_id=8;
+    string withdraw_pass=9;
+    string business_name=10;
+    string business_photo=11;
+}
+
+
+
+message getUserPagePermissionRequest {
+    int64 uid = 1;
+    int64 business_group_id = 2;
+    int64 business_id=3;
+}
+
+message PagePermissionResponse {
+    repeated string permission_name = 1;
+}
+
+
+message checkUserGroupPermissionRequest {
+    int64 uid = 1; // 用户id
+    int64 userGroupID = 2; // 角色id
+    string roleName = 3; // 权限名
+}
+
+message checkGroupPermissionRequest {
+    int64 uid = 1; // 用户id
+    int64 userGroupID = 2; // 角色id
+    string roleName = 3; // 权限名
+    int64 business_id=4;
+}
+
+
+message getPermissionGroupRequest {
+    int64 business_group_id = 1;
+    int64 business_id=2;
+}
+
+message getPermissionGroupResponse {
+    repeated getPermissionGroup list = 1;
+}
+
+
+message getPermissionGroup {
+    int64 id = 1;
+    string name = 2;
+    repeated getPermissionUser user = 3;
+    repeated getPermission role = 4;
+}
+
+message getPermissionUser {
+    int64 uid=1;
+    string name=2;
+    string phone=3;
+}
+
+message getPermission{
+    int64 id=1;
+    string name=2;
+    int64 status=3;
+}
+
+message deleteUserPermissionRequest{
+    int64 uid=1;
+    int64 group_id=2;
+    int64 business_id=3;
+}
+
+message getBrandGoodCategoryRequest {
+    int64 business_id = 1;
+}
+
+message getBrandGoodCategoryResponse {
+    repeated int64 list = 1;
+}
+
+
+message getCommitmentResponse {
+    repeated Commitment list = 1;
+}
+
+
+message Commitment {
+    int64 id = 1;
+    string name = 2;
+    int64 status = 3;
+}

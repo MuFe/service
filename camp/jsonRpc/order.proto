@@ -1,0 +1,365 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service OrderService {
+    //检查通道连接
+    rpc get_user_address (AddressListServiceRequest) returns (AddressListServiceResponse);
+    rpc edit_user_address (EditAddressServiceRequest) returns (EmptyResponse);
+    rpc create (OrderRequest) returns (CreateOrderResponse);
+    rpc edit_shop_car (EditShopCarRequest) returns (EmptyResponse);
+    rpc pay (OrderPayRequest) returns (PayServiceResponse);
+    rpc check_pay (CheckPayRequest) returns (CheckOrderStatusResponse);
+    rpc edit_status (EditStatusRequest) returns (EditStatusResponse);
+    rpc getOrders (GetOrderRequest) returns (GetOrderResponse);
+    rpc get_order_num (getOrderNumRequest) returns (getOrderNumResponse);
+    rpc postOrderRefund (postRefundReq) returns (EmptyResponse);
+    rpc putOrderRefundStatus (putOrderRefundStatusReq) returns (EmptyResponse);
+}
+
+
+service PayService{
+    rpc createPay(PayServiceRequest) returns(PayServiceResponse);
+    rpc checkPayData(PayDataRequest) returns(PayDataResponse);
+    rpc check_order_status(CheckOrderStatusRequest) returns (CheckOrderStatusResponse);
+    rpc refund_order(RefundOrderRequest) returns (EmptyResponse);
+}
+
+message AddressListServiceRequest {
+    int64 uid = 1;
+    bool is_first=2;
+    int64 id=3;
+}
+
+
+message Address {
+    int64 id = 1;
+    string name = 2;
+    string province = 3;
+    string city = 4;
+    string area = 5;
+    string address = 6;
+    string phone = 7;
+    bool is_default = 8;
+}
+
+message AddressListServiceResponse {
+    repeated Address list = 1;
+}
+
+message EditAddressServiceRequest {
+    int64 uid = 1;
+    Address address = 2;
+    bool is_del=3;
+}
+
+message OrderRequest {
+    int64 buyer_id = 1;
+    repeated OrderData response = 2;
+    int64 time = 3;
+    int64 order_type = 4;
+    int64 price = 5; //订单金额
+    string title = 6;
+    string desc = 7;
+    int64 pay_price = 8; //支付金额
+    string phone = 9;
+    string province = 10;
+    string city = 11;
+    string area = 12;
+    string address = 13;
+    string consignee = 14;
+    int64 show_order_list=15;
+}
+
+message CreateOrderResponse {
+    int64 id = 1;
+    int64 payAmount = 2;
+    int64 endTime = 3;
+    string order_sn = 4;
+}
+
+message OrderData{
+    int64 seller_id=1;
+    repeated OrderGood list=2;
+    int64 price=3;//订单金额
+    int64  p_price=4;//支付金额
+    int64 deliver_price=5;//运费
+}
+
+message OrderGood{
+    int64 num=1;
+    int64 sku_id=2;
+    int64 price=3;
+    int64 agreement_price=4;
+    int64 brand_id=5;//子订单中的商品商家id
+    int64 spu_id=6;
+}
+
+message EditShopCarRequest {
+    repeated EditShopCarData list=1;
+    int64 uid = 2;
+    bool clear=3;
+}
+
+
+message EditShopCarData{
+    int64 sku_id=1;
+    int64 num=2;
+    int64 shop_id=3;
+    bool add=4;
+    int64 stock=5;
+}
+
+message OrderPayRequest {
+    int64 order_id = 1;
+    string order_sn = 2;
+    string face_code = 3;
+    string open_id = 4;
+    string app_id = 5;
+    string notify_url = 6;
+    int64 pay_type = 7;
+    bool only_get_pay_info = 8;
+    int64 pay_total_free = 9;
+    int64 uid = 10;
+    int64 channel_type=11;
+}
+
+message CheckPayRequest {
+    int64 order_id = 1;
+    string order_sn = 2;
+    string app_id = 3;
+}
+
+
+message PayServiceResponse{
+    string code_url=1;
+    bool is_test=2;
+    string request=3;
+    string prepay_id=4;
+    bool pay=5;
+    int64 pay_free=6;
+    int64 status=7;
+    int64 order_id=8;
+    string order_sn=9;
+    string timeStamp=10;
+    string nonceStr=11;
+    string package=12;
+    string paySign=13;
+    string signType=14;
+    string appId=15;
+    string partnerId=16;
+}
+
+message CheckOrderStatusResponse{
+    string transaction_id=1;
+    string out_trade_no=2;
+    int64 status=3;
+    int64 pay_time=4;
+    int64 total_fee=5;
+}
+
+
+message PayServiceRequest{
+    string app_id=1;
+    string api_key=2;
+    string mch_id=3;
+    string notify_url=4;
+    string open_id=5;
+    string title=6;
+    string order_sn=7;
+    int64 total=8;
+    string prepay_id=9;
+    int64 pay_type=10;
+    string face_code=11;
+    string out_trade_no=12;
+    int64 channel_type=13;
+}
+
+
+message PayDataRequest{
+    string body=1;
+}
+
+message PayDataResponse{
+    string order_sn=1;
+    string transaction_id=2;
+    string attach=3;
+}
+
+message CheckOrderStatusRequest{
+    string app_id=1;
+    string api_key=2;
+    string mch_id=3;
+    string order_sn=4;
+}
+
+message RefundOrderRequest{
+    string app_id=1;
+    string api_key=2;
+    string mch_id=3;
+    string order_sn=4;
+    int64 total_free=5;
+    int64 refund_free=6;
+    string out_refund_no=7;
+    int64 channel_type=8;
+}
+
+message EditStatusRequest {
+    int64 order_id = 1;
+    int64 buyer_id = 2;
+    int64 status = 3;
+
+    int64 send_uid = 4;
+    int64 business_id = 5;
+    int64 sub_order_id = 6;
+    repeated BatchExpressData list = 7;
+
+    string order_sn = 8;
+}
+
+message BatchExpressData {
+    int64 id = 1;
+    string express_number = 2;
+    string express_company = 3;
+}
+
+message EditStatusResponse {
+    int64 order_id = 1;
+    int64 sub_order_id = 2;
+    string order_sn = 3;
+}
+
+
+message GetOrderRequest {
+    int64 seller_id = 1;
+    int64 page = 2;
+    int64 size = 3;
+    repeated int64 status = 5;
+    int64 start_time = 6;
+    int64 end_time = 7;
+    int64 sub_order_id = 8;
+    repeated int64 order_types = 9;
+    int64 buyer_id = 10;
+    int64 order_id = 11;
+    int64 buyer_type=12;
+
+
+    string spu_name = 13;
+    string buyer_name=14;
+    string brand=15;
+    string operator=16;
+    string order_sn=17;
+    string express_number=18;
+    string buyer_number=19;
+    string phone=20;
+    int64 query_type=21;
+    string operator_no=22;
+    int64 show_order=23;
+}
+
+message GetOrderResponse {
+    repeated GetOrderData list = 1;
+    int64 total = 2;
+}
+
+message postRefundReq {
+    int64 sub_order_id = 1;
+    bool all = 2;
+    int64 buyer_id = 3;
+    repeated postRefundReqList list = 4;
+    bool cancel = 5;
+    bool pass = 6;
+    int64 refund_type=7;
+    int64 refund_method=8;
+    string reason=9;
+    string express_number=10;
+    string express_company=11;
+    repeated postRefundPhoto photo_list=12;
+    string explain=13;
+    int64 order_id=14;
+}
+
+message GetOrderData {
+    string order_sn = 1;
+    int64 status = 2;
+    string consignee = 3;
+    string phone = 4;
+    string province = 5;
+    string city = 6;
+    string area = 7;
+    int64 order_mount = 8;
+    string express_number = 9;
+    string message = 10;
+    string admin_message = 11;
+    int64 sub_order_id = 12;
+    string user_sn = 13;
+    int64 order_time = 14;
+    repeated GetOrderSpu list = 15;
+    int64 end_time = 16;
+    int64 pay_time = 17;
+    string transaction_id = 18;
+    string express_company = 19;
+    bool is_have_comment = 20;
+    string address = 21;
+    string head = 22;
+    int64 delivery_price = 23;
+    int64 pay_mount = 24;
+    int64 order_id = 25;
+    int64 pay_type = 26;
+    int64 coupon_price = 27;
+    int64 seller_id = 28;
+    string shop_phone = 29;
+    string shop_name = 30;
+    string shop_photo = 31;
+    int64 buyer_id = 32;
+    int64 order_type = 34;
+    string user_name = 35;
+    int64 pay_channel = 36;
+    int64 buy_type=37;
+    bool show_order=38;
+}
+
+
+message GetOrderSpu {
+    int64 id = 1;
+    string name = 2;
+    string photo = 3;
+    repeated GetOrderSku list = 4;
+}
+
+message GetOrderSku {
+    string spec = 1;
+    int64 num = 2;
+    int64 sku_id = 3;
+    int64 price = 4;
+    int64 now_price = 5;
+}
+
+
+message getOrderNumRequest {
+    map<int64, int64> spu_sku_map = 1;
+    bool refresh = 2;
+
+}
+
+message getOrderNumResponse {
+    map<int64, int64> result = 1;
+    map<int64, int64> sku_result = 2;
+}
+
+message postRefundPhoto{
+    int64 type=1;
+    repeated string list=2;
+}
+
+message postRefundReqList {
+    int64 ogID = 1;
+    int64 num = 2;
+}
+
+message putOrderRefundStatusReq {
+    int64 sub_order_id = 2;
+    string remark = 3;
+    bool pass = 4;
+    string adminNo = 5;
+    int64 order_id=14;
+}

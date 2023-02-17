@@ -1,0 +1,458 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service CourseService {
+    //检查通道连接
+    rpc getCourse (CourseServiceRequest) returns (CourseServiceResponse); //获取课程列表
+    rpc getAdminCourse (CourseServiceRequest) returns (CourseServiceResponse); //获取课程列表
+    rpc getAdminCourseDetail (CourseServiceRequest) returns (CourseServiceResponse); //获取课程列表
+    rpc getCourseLevel (CourseLevelRequest) returns (CourseLevelResponse);
+    rpc editCourseLevel (EditCourseLevelRequest) returns (EditCourseLevelResponse);
+
+
+    rpc editCourse (EditCourseRequest) returns (EditCourseResponse);
+    rpc editCourseCover (EditCourseRequest) returns (EmptyResponse);
+    rpc tagList (TagRequest) returns (TagResponse);
+    rpc edit_tag (EditTagRequest) returns (TagData);
+    rpc notice (NoticeRequest) returns (NoticeResponse);
+    rpc AddNotice (NoticeRequest) returns (EmptyResponse);
+    rpc notice_detail (NoticeRequest) returns (NoticeData);
+    rpc getOrigin (GetOriginRequest) returns (GetOriginResponse);
+}
+
+service ChapterService {
+    //检查通道连接
+    rpc getChapter (ChapterServiceRequest) returns (ChapterServiceResponse); //获取章节列表
+    rpc getAdminChapter (ChapterServiceRequest) returns (ChapterServiceResponse); //获取章节列表
+    rpc getAdminChapterDetail (ChapterServiceRequest) returns (ChapterServiceResponse); //获取章节列表
+    rpc editChapter (EditChapterRequest) returns (EditChapterResponse); //获取章节列表
+    rpc editChapterCoverInfo (EditChapterRequest) returns (EmptyResponse); //获取章节列表
+    rpc editChapterSort (ChapterRequest) returns (EmptyResponse);
+    rpc getChapterWithVideo (ChapterVideoServiceRequest) returns (ChapterVideoServiceResponse); //获取章节加视频
+    rpc getAdminChapterWithVideo (ChapterVideoServiceRequest) returns (ChapterVideoServiceResponse); //获取章节加视频
+}
+
+service CollectionService {
+    rpc isCollection (CollectionServiceRequest) returns (CollectionServiceResponse);
+    rpc editCollection (CollectionServiceRequest) returns (EmptyResponse);
+    rpc getCollection (GetCollectionRequest) returns (GetCollectionResponse);
+}
+
+service VideoService {
+    rpc addVideo (AddVideoRequest) returns (AddVideoResponse);
+    rpc editItem (EditItemRequest) returns (EditItemResponse);
+    rpc editItemInfo (EditItemInfoRequest) returns (EmptyResponse);
+    rpc getAdminItem (GetItemRequest) returns (GetItemResponse);
+    rpc videoList (VideoRequest) returns (VideoResponse);
+    rpc delChapterVideo (VideoRequest) returns (EmptyResponse);
+    //获取项
+    rpc getVideo (VideoRequest) returns (VideoResponse);
+    rpc historyVideoList (VideoRequest) returns (VideoResponse);
+    rpc editVideoSort (VideoRequest) returns (EmptyResponse);
+    rpc editVideoCover (VideoRequest) returns (EmptyResponse);
+    rpc addHistoryVideo (AddVideoHistoryRequest) returns (EmptyResponse);
+    rpc delHistoryVideo (DelVideoHistoryRequest) returns (EmptyResponse);
+}
+
+service RecommendService {
+    rpc getRecommendList (RecommendRequest) returns (RecommendResponse);
+    rpc getAdminRecommendList (RecommendRequest) returns (RecommendResponse);
+    rpc getRecommendInfoList (RecommendInfoRequest) returns (RecommendInfoResponse);
+    rpc editRecommend (EditRecommendRequest) returns (EmptyResponse);
+}
+
+
+
+message RecommendRequest {
+    repeated int64 ids = 1;
+    int64 page = 2;
+    int64 size = 3;
+}
+
+message RecommendData {
+    int64 info_id = 1;
+    int64 id = 2;
+    int64 content_id = 3;
+    int64 content_type = 4;
+}
+
+message RecommendInfoData {
+    int64 id = 1;
+    string title = 2;
+    string icon = 3;
+    int64 type = 4;
+    repeated RecommendData list = 5;
+}
+
+message RecommendInfoRequest {
+    int64 type = 1;
+}
+
+message RecommendInfoResponse {
+    repeated RecommendInfoData list = 1;
+}
+
+
+message RecommendResponse {
+    repeated RecommendData list = 1;
+}
+
+message EditRecommendRequest {
+    int64 id = 1;
+    bool is_del = 2;
+    int64 type = 3;
+    int64 content_id = 4;
+    int64 content_type = 5;
+}
+
+message CourseServiceRequest {
+    repeated int64 ids = 1;
+    int64 status = 2;
+    repeated int64 level_id = 3;
+
+}
+
+message CourseServiceResponse {
+    repeated CourseData list = 1;
+    int64 total = 2;
+}
+
+message CourseLevelRequest {
+    int64 type=1;
+}
+
+message CourseLevelResponse {
+    repeated CourseLevel list = 1;
+}
+
+message EditCourseLevelRequest {
+    int64 id = 1;
+    string name = 2;
+    int64 type=3;
+}
+
+message EditCourseLevelResponse {
+    int64 id = 1;
+}
+
+message CourseLevel {
+    int64 id = 1;
+    string name = 2;
+    int64 number = 3;
+}
+
+message CourseData {
+    int64 id = 1;
+    string title = 2;
+    string cover = 3;
+    string desc = 4;
+    int64 section = 5;
+    repeated string study = 6;
+    repeated TagData tag = 7;
+    string bg=8;
+    GetOriginResponse data=9;
+}
+
+
+message ChapterServiceRequest {
+    repeated int64 ids = 1;
+    int64 page = 2;
+    int64 size = 3;
+    int64 courseId = 4;
+    int64 video_size = 5;
+    int64 status = 6;
+}
+
+message ChapterRequest {
+    string title = 1;
+    string desc = 2;
+    int64 course_id = 3;
+    repeated int64 tag_id = 4;
+    int64 price = 5;
+    int64 create_by = 6;
+    repeated VideoData video_list = 7;
+    int64 id = 8;
+    bool is_del = 9;
+    int64 sort = 10;
+    string cover = 11;
+    string prefix = 12;
+}
+
+message EditChapterRequest {
+    int64 id = 1;
+    string title = 2;
+    string desc = 3;
+    int64 source = 4;
+    repeated int64 home_work = 5;
+    int64 create_by = 6;
+    string info_content = 7;
+    int64 type = 8;
+    string prefix = 9;
+    repeated int64 tag_id = 10;
+}
+
+message EditChapterResponse {
+    int64 id = 1;
+}
+
+
+message ChapterVideoServiceRequest {
+    repeated int64 chapterId = 1;
+    int64 page = 2;
+    int64 size = 3;
+    int64 status = 4;
+    int64 course_id = 5;
+}
+
+message ChapterServiceResponse {
+    repeated ChapterData list = 1;
+    int64 total = 2;
+}
+
+message ChapterVideoServiceResponse {
+    repeated ChapterData list = 1;
+}
+
+message EditCourseOriginData{
+    string prefix=1;
+    string cover=2;
+    bool is_del=3;
+}
+message EditCourseRequest {
+    string title = 1;
+    string desc = 2;
+    int64 level = 3;
+    repeated int64 tag_id = 4;
+    int64 id = 5;
+    int64 create_by = 6;
+    string cover = 7;
+    string prefix = 8;
+    repeated string study = 9;
+    string  origin_name=10;
+    string  origin_title=11;
+    string  origin_desc=12;
+    string  origin_info=13;
+    string  origin_info_title=14;
+    string  certificate=15;
+    int64 type=16;
+    repeated EditCourseOriginData auth_list=17;
+
+}
+
+message EditCourseResponse {
+    int64 id = 1;
+}
+
+
+message CourseRequest {
+    string title = 1;
+    string desc = 2;
+    int64 level = 3;
+    repeated int64 tag_id = 4;
+    int64 price = 5;
+    int64 create_by = 6;
+    int64 course_id = 7;
+    bool is_del = 8;
+    string cover = 9;
+    string prefix = 10;
+}
+
+
+message ChapterData {
+    int64 id = 1;
+    string title = 2;
+    string cover = 3;
+    string desc = 4;
+    string level = 5;
+    repeated TagData tag = 6;
+    int64 time = 7;
+    int64 section = 8;
+    int64 user = 9;
+    int64 price = 10;
+    repeated VideoData video_list = 11;
+    int64 level_id = 12;
+    string plan = 13;
+    string video = 14;
+    repeated int64 homework = 15;
+}
+
+message VideoData {
+    int64 id = 1;
+    string cover = 2;
+    string url = 3;
+    string down_url = 4;
+    int64 duration = 5;
+    string title = 6;
+    string content = 7;
+    repeated TagData tag = 8;
+    string level = 9;
+    int64 user = 10;
+    int64 price = 11;
+    int64 level_id = 12;
+    int64 video_id = 13;
+    string video = 14;
+    int64 chapter_id = 15;
+}
+
+
+message CollectionServiceRequest {
+    int64 content_id = 1;
+    int64 type = 2;
+    bool del = 3;
+    int64 uid = 4;
+}
+
+message CollectionServiceResponse {
+    bool collection = 1;
+}
+
+message GetCollectionRequest {
+    int64 page = 1;
+    int64 size = 2;
+    int64 identity = 3;
+    int64 uid = 4;
+    int64 type = 5;
+}
+
+message GetCollectionResponse {
+    repeated ChapterData list = 1;
+    int64 total = 2;
+}
+
+message AddVideoRequest {
+    repeated AddVideoData list = 1;
+    int64 chapter_id = 2;
+}
+
+message AddVideoResponse {
+    repeated int64 list = 1;
+}
+
+message AddVideoData {
+    string cover = 1;
+    string cover_prefix = 2;
+    int64 duration = 3;
+    string url = 4;
+    string url_prefix = 5;
+    string down_url = 6;
+    string down_url_prefix = 7;
+
+    string title = 9;
+    string content = 10;
+    repeated int64 tag_id = 11;
+    int64 price = 12;
+    int64 video_id = 13;
+    int64 id = 14;
+}
+
+message EditItemRequest {
+    int64 id = 1;
+    int64 chapter_id = 2;
+    string title = 3;
+    repeated int64 tag_id = 4;
+}
+
+message EditItemResponse {
+    int64 id = 1;
+}
+
+message EditItemInfoRequest {
+    int64 id = 1;
+    int64 type = 2;
+    string content = 3;
+    string prefix = 4;
+    repeated AddVideoData list = 5;
+}
+
+message VideoRequest {
+    int64 page = 1;
+    int64 pagesize = 2;
+    string key = 3;
+    int64 uid = 4;
+    int64 video_id = 5;
+    int64 tag_id = 6;
+    int64 sort = 7;
+    string cover = 9;
+    string prefix = 10;
+}
+
+message AddVideoHistoryRequest {
+    int64 id = 1;
+    int64 uid = 2;
+}
+
+message DelVideoHistoryRequest {
+    repeated int64 id = 1;
+    int64 uid = 2;
+}
+
+message VideoResponse {
+    repeated VideoData video_list = 1;
+    int64 total = 2;
+}
+
+message TagRequest {
+    int64 status = 1;
+    int64 id = 2;
+}
+
+message TagResponse {
+    repeated TagData list = 1;
+}
+
+
+message EditTagRequest {
+    int64 id = 1;
+    string title = 2;
+    string content = 3;
+    string cover = 4;
+    string prefix = 5;
+    int64 type = 6;
+}
+
+message NoticeRequest {
+    int64 id = 1;
+    string title = 2;
+    string content = 3;
+    int64 create_by = 4;
+}
+
+message NoticeResponse {
+    repeated NoticeData list = 1;
+}
+
+message NoticeData {
+    int64 id = 1;
+    string title = 2;
+    int64 time = 3;
+    string content = 4;
+    int64 create_by = 5;
+}
+
+
+message GetItemRequest {
+    repeated int64 id = 1;
+}
+
+
+message GetItemResponse {
+    repeated VideoData data = 1;
+}
+
+
+message GetOriginRequest{
+    int64 id=1;
+}
+
+
+message GetOriginResponse{
+    string photo=1;
+    string name=2;
+    string title=3;
+    string desc=4;
+    string info=5;
+    string info_title=6;
+    string certificate=7;
+    repeated string auth=8;
+}
+

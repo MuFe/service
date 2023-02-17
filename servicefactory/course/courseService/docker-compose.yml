@@ -1,0 +1,24 @@
+version: "3"
+services:
+  course_service:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/course_service:latest
+    env_file:
+      - ../../../.env
+    environment:
+      - SERVICE_80_NAME=course_service
+      - SERVICE_TAGS=mufe_service
+      - PORT=80
+    ports:
+      - "80"
+    networks:
+     - micro
+
+
+networks:
+  micro:
+    external:
+      name: mufe_service_micro
+
+
+
+

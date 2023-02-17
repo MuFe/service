@@ -1,0 +1,226 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service CoachService {
+    //检查通道连接
+    rpc getInstitution (InstitutionRequest) returns (InstitutionResponse); //获取机构列表
+    rpc editInstitution (EditInstitutionRequest) returns (EditInstitutionResponse); //修改新增机构
+    rpc editInstitutionSchool (EditInstitutionSchoolRequest) returns (EditInstitutionResponse); //修改新增机构校区
+    rpc editInstitutionCourse (EditInstitutionCourseRequest) returns (EmptyResponse); //修改课程
+    rpc school_list (InstitutionSchoolRequest) returns (InstitutionSchoolResponse); //校区列表
+    rpc course_list (InstitutionCourseRequest) returns (InstitutionCourseResponse); //课程列表
+    rpc coach_list (CoachListRequest) returns (CoachListResponse); //加入机构
+    rpc work_list (InstitutionWorkListRequest) returns (InstitutionWorkListResponse); //排课表
+    rpc joinInstitution (JoinInstitutionCourseRequest) returns (EmptyResponse); //加入机构
+    rpc addWork (InstitutionWorkRequest) returns (EmptyResponse); //排课
+    rpc work_order (InstitutionWorkOrderRequest) returns (EmptyResponse); //预订
+    rpc work_order_list (InstitutionWorkOrderRequest) returns (InstitutionWorkOrderResponse); //预订
+    rpc cancelCoach (CancelCoachRequest) returns (EmptyResponse); //预订
+}
+
+
+message InstitutionRequest {
+    int64 page = 1;
+    int64 size = 2;
+    int64 status = 3;
+    int64 id = 4;
+    string code=5;
+    int64 uid=6;
+}
+
+message InstitutionData {
+    int64 id = 1;
+    string address = 2;
+    string name = 3;
+    string icon = 4;
+    string code = 5;
+}
+
+message InstitutionResponse {
+    repeated InstitutionData list = 1;
+}
+
+message EditInstitutionRequest {
+    int64 id = 1;
+    string name = 2;
+    string address = 3;
+    string prefix = 4;
+    string icon = 5;
+    bool del = 6;
+    int64 create = 7;
+}
+
+message EditInstitutionResponse {
+    int64 id = 1;
+}
+
+message InstitutionSchoolRequest {
+    int64 iid = 1;
+    int64 id = 2;
+    int64 page = 3;
+    int64 size = 4;
+    int64 status = 5;
+}
+
+message InstitutionSchool {
+    int64 id = 1;
+    string name = 2;
+    string phone = 3;
+    string icon = 4;
+    int64 start = 5;
+    int64 end = 6;
+    string address = 7;
+    repeated InstitutionCourse course = 8;
+    bool isSelect=9;
+}
+
+message InstitutionCourse {
+    int64 id = 1;
+    string name = 2;
+    int64 max = 3;
+    int64 price = 4;
+    string level = 5;
+    int64 school_id=6;
+    int64 duration=7;
+}
+
+message InstitutionSchoolResponse {
+    repeated InstitutionSchool list = 1;
+}
+
+
+message EditInstitutionSchoolRequest {
+    int64 id = 1;
+    string name = 2;
+    string address = 3;
+    string prefix = 4;
+    string icon = 5;
+    bool del = 6;
+    int64 create = 7;
+    int64 start = 8;
+    int64 end = 9;
+    string phone = 10;
+    repeated int64 course = 11;
+    int64 parent_id = 12;
+}
+
+message InstitutionCourseRequest {
+    int64 iid = 1;
+    int64 id = 2;
+    int64 page = 3;
+    int64 size = 4;
+    int64 status = 5;
+    repeated int64 school_id=6;
+}
+
+message InstitutionCourseResponse {
+    repeated InstitutionCourse list = 1;
+}
+
+
+message EditInstitutionCourseRequest {
+    int64 id = 1;
+    string name = 2;
+    bool del = 3;
+    int64 create = 4;
+    int64 max = 5;
+    int64 price = 6;
+    string level = 7;
+    int64 parent_id = 8;
+    int64 duration=9;
+}
+
+message JoinInstitutionCourseRequest{
+    int64 id=1;
+    int64 uid=2;
+    bool quit=3;
+    string info=4;
+    int64 institutionId=5;
+}
+
+
+message CoachListRequest{
+    int64 page=1;
+    int64 size=2;
+    int64 id=3;
+    int64 iid=4;
+}
+
+message CoachData{
+    int64 uid=1;
+    string info=2;
+    int64 institution_id=3;
+    int64 id=4;
+}
+
+message CoachListResponse {
+    repeated CoachData list = 1;
+}
+
+message InstitutionWorkRequest{
+    int64 start=1;
+    int64 end=2;
+    int64 place=3;
+    int64 course=4;
+    string desc=5;
+    int64 uid=6;
+    bool del=7;
+    int64 id=8;
+}
+
+message InstitutionWorkListRequest{
+    int64 uid=1;
+    int64 start=2;
+    int64 place=3;
+    int64 end=4;
+    repeated int64 id=5;
+    int64 status=6;
+}
+
+message InstitutionWorkData{
+    int64 id=1;
+    int64 uid=2;
+    string name=3;
+    int64 start=4;
+    int64 end=5;
+    string level=6;
+    int64 max=7;
+    int64 now=8;
+    int64 price=9;
+    bool reserve=10;
+    string user_info=11;
+    string desc=12;
+    int64 duration=13;
+    InstitutionSchool place=14;
+    int64 course_id=15;
+}
+
+message InstitutionWorkListResponse{
+    repeated InstitutionWorkData list=1;
+}
+
+message InstitutionWorkOrderRequest{
+    int64 id=1;
+    int64 uid=2;
+    int64 status=3;
+    int64 page=4;
+    int64 size=5;
+    repeated int64 query_status=6;
+    int64 order_id=7;
+}
+
+message InstitutionWorkOrderData{
+    int64 work_id=1;
+    int64 order_id=2;
+    int64 uid=3;
+    int64 status=4;
+    int64 num=5;
+    int64 id=6;
+}
+message InstitutionWorkOrderResponse{
+    repeated InstitutionWorkOrderData list=1;
+}
+
+message CancelCoachRequest{
+    repeated int64 list=1;
+}

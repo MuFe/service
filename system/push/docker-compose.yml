@@ -1,0 +1,26 @@
+version: "3"
+services:
+  system_push_service:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/system_push_service:latest
+    env_file:
+      - ../../.env
+    environment:
+      - SERVICE_80_NAME=system_push_service
+      - SERVICE_TAGS=mufe_service
+      - PUSH_APP_KEY=98491f2720f6179490b47ca9
+      - PUSH_APP_SECRET=748df546e2789aeb994c1815
+      - PORT=80
+    ports:
+      - "80"
+    networks:
+     - micro
+
+
+networks:
+  micro:
+    external:
+      name: mufe_service_micro
+
+
+
+

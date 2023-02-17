@@ -1,0 +1,46 @@
+syntax = "proto3";
+package app;
+service  QiniuService {
+    //检查通道连接
+    rpc get_token(QiniuServiceRequest) returns(QiniuServiceResponse);
+    rpc uploadBytes(uploadBytesReq) returns(uploadBytesRsp);
+    rpc getVideoInfo(GetVideoInfoRequest) returns(VideoInfoResponse);
+    rpc wordInspect(WordInspectRequest) returns(WordInspectResponse);
+}
+
+message uploadBytesReq{
+    string bucket=1;
+    string key=2;
+    bytes data=3;
+}
+message uploadBytesRsp{}
+
+message QiniuServiceRequest{
+   string bucket=1;
+   bool is_base64=2;
+}
+
+message QiniuServiceResponse{
+    string token=1;
+    string upload_host=2;
+    string base64_upload_host=3;
+}
+
+message GetVideoInfoRequest{
+    string url=1;
+    string prefix=2;
+}
+
+message VideoInfoResponse{
+    string cover=1;
+    string cover_prefix=2;
+    int64 duration=3;
+}
+
+message WordInspectRequest{
+    string content=1;
+}
+
+message WordInspectResponse{
+    int64 type=1;
+}

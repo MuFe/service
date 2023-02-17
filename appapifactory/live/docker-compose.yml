@@ -1,0 +1,24 @@
+version: "3"
+services:
+  appapi_live_api:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/appapi_live_api:latest
+    env_file:
+      - ../../.env
+    environment:
+      - SERVICE_80_NAME=appapi_live_api
+      - SERVICE_TAGS=mufe_service
+      - PORT=80
+    ports:
+      - "80"
+    networks:
+      - micro
+
+
+networks:
+  micro:
+    external:
+      name: mufe_service_micro
+
+
+
+

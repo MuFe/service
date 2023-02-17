@@ -1,0 +1,195 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service SchoolService {
+    rpc school_list (SchoolRequest) returns (SchoolResponse);
+    rpc school_type_list (EmptyRequest) returns (SchoolTypeResponse);
+    rpc editSchool (SchoolData) returns (AddSchoolResponse);
+    rpc addSchool (AddSchoolRequest) returns (EmptyResponse);
+    rpc quitSchool (AddSchoolRequest) returns (EmptyResponse);
+    rpc mySchool (SchoolRequest) returns (SchoolResponse);
+    rpc scan (ScanRequest) returns (ScanResponse);
+    rpc grade_list (GradeRequest) returns (GradeTypeResponse);
+    rpc create_class_info (CreateClassInfoRequest) returns (EmptyResponse);
+    rpc create_class (CreateClassRequest) returns (EmptyResponse);
+    rpc join_class (JoinClassRequest) returns (EmptyResponse);
+    rpc quit_class (QuitClassRequest) returns (EmptyResponse);
+    rpc dissolution_class (QuitClassRequest) returns (QuitClassResponse);
+    rpc class_list (ClassRequest) returns (ClassResponse);
+    rpc class_detail (ClassDetailRequest) returns (Class);
+    rpc class_info (ClassInfoRequest) returns (ClassResponse);
+    rpc addCourse (AddCourseRequest) returns (EmptyResponse);
+    rpc removeCourse (AddCourseRequest) returns (EmptyResponse);
+    rpc editCourseProgress (EditCourseProgressRequest) returns (EmptyResponse);
+    rpc user_list (TeacherUserRequest) returns (TeacherUserResponse);
+    rpc cancel_school(CancelSchoolRequest) returns(EmptyResponse);
+
+}
+
+message AddSchoolRequest {
+    int64 school_id = 1;
+    int64 uid = 2;
+
+}
+
+message SchoolRequest {
+    int64 uid = 1;
+    int64 id = 2;
+}
+message SchoolResponse {
+    repeated SchoolData list = 1;
+    int64 total = 2;
+}
+
+message SchoolData {
+    int64 id = 1;
+    string name = 2;
+    string icon = 3;
+    string desc = 4;
+    string code = 5;
+    int64 type_id = 6;
+    string type_name = 7;
+    string address=8;
+}
+
+message AddSchoolResponse {
+    int64 id = 1;
+}
+
+message ScanRequest {
+    string content = 1;
+}
+
+message ScanResponse {
+    SchoolData school = 1;
+    Class class = 2;
+}
+
+message GradeTypeResponse {
+    repeated GradeTypeInfo list = 1;
+}
+message GradeTypeInfo {
+    int64 type_id = 1;
+    string type = 2;
+    repeated GradeInfo list = 3;
+}
+message GradeInfo {
+    int64 id = 1;
+    string name = 2;
+}
+
+message CreateClassInfoRequest {
+    int64 uid = 1;
+    int64 school_id = 2;
+    int64 grade_id = 3;
+    repeated string name=4;
+}
+message CreateClassRequest {
+    int64 uid = 1;
+    int64 class_info_id = 2;
+}
+
+message JoinClassRequest {
+    int64 uid = 1;
+    int64 class_id = 2;
+    int64 type=3;
+}
+
+message GradeRequest{
+    int64 school_id=1;
+}
+
+message QuitClassRequest {
+    int64 uid = 1;
+    int64 class_id = 2;
+    int64 quit_uid=3;
+}
+
+message ClassRequest {
+    int64 uid = 1;
+    int64 page = 2;
+    int64 size = 3;
+    int64 status = 4;
+    int64 id=5;
+    int64 grade=6;
+    int64 school=7;
+}
+
+message ClassInfoRequest{
+    int64 school_id=1;
+    int64 grade_id=2;
+}
+
+message ClassResponse {
+    repeated Class list = 1;
+    int64 total=2;
+}
+
+message Class {
+    int64 id = 1;
+    string grade = 2;
+    int64 grade_id = 3;
+    string school_type = 4;
+    string name = 5;
+    int64 create_time = 6;
+    int64 uid = 7;
+    int64 number = 8;
+    string tag = 9;
+    string code=10;
+    repeated int64 admin_list = 11;
+    repeated int64 student_list = 12;
+    int64 course_id=13;
+    double  progress=14;
+    int64 chapter_index=15;
+    int64 video_index=16;
+    int64 video_id=17;
+    string school_name=18;
+    string school_icon=19;
+    int64 create_by=20;
+}
+
+message QuitClassResponse{
+    repeated int64 student_list = 1;
+}
+
+message AddCourseRequest{
+    int64 uid=1;
+    int64 course_id=2;
+    int64 class_id=3;
+}
+
+message ClassDetailRequest{
+    int64 id=1;
+    int64 uid=2;
+}
+
+message EditCourseProgressRequest{
+    int64 video_id=1;
+    int64 class_id=2;
+    int64 uid=3;
+}
+
+message SchoolTypeData{
+    int64 id=1;
+    string name=2;
+    repeated GradeInfo grade=3;
+}
+
+message SchoolTypeResponse {
+    repeated SchoolTypeData list=1;
+}
+
+message TeacherUserRequest{
+    int64 type=1;
+    int64 school_id=2;
+    int64 grade_id=3;
+    int64 class_id=4;
+}
+
+message TeacherUserResponse{
+    repeated int64 list=1;
+}
+
+message CancelSchoolRequest{
+    repeated int64 list=1;
+}

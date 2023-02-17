@@ -1,0 +1,26 @@
+syntax = "proto3";
+package app;
+service PushService {
+    //检查通道连接
+    rpc push_message(PushRequest) returns (PushResponse);
+    rpc get_phone(GetPhoneRequest) returns(GetPhoneResponse);
+}
+
+message  PushRequest{
+    repeated string device_list=1;
+    string content=2;
+    string title=3;
+    string message=4;
+}
+
+message PushResponse{
+    string message=1;
+}
+
+message GetPhoneRequest{
+    string token=1;
+}
+
+message GetPhoneResponse{
+    string phone=1;
+}

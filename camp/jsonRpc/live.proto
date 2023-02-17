@@ -1,0 +1,148 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service LiveService {
+    //检查通道连接
+    rpc getList (GetLiveDataRequest) returns (GetLiveDataResponse);
+    rpc create (CreateLiveRequest) returns (CreateLiveResponse);
+    rpc start (StartLivRequest) returns (StartLivResponse);
+    rpc end (EndLivRequest) returns (EmptyResponse);
+    rpc updateScore (UpdateScoreRequest) returns (EmptyResponse);
+    rpc endLive (StartLivRequest) returns (EmptyResponse);
+    rpc watch (WatchLiveRequest) returns (StartLivResponse);
+    rpc endWatch (WatchLiveRequest) returns (EmptyResponse);
+    rpc package (EmptyRequest) returns (PackageDataResponse);
+    rpc team_member (TeamMemberRequest) returns (TeamMemberResponse);
+    rpc liveInfo (LiveRequest) returns (GetLiveData);
+    rpc getWatchInfo (LiveRequest) returns (GetLiveData);
+}
+
+message GetLiveDataRequest {
+    int64 uid = 1;
+}
+
+message CreateLiveResponse {
+    int64 id = 1;
+    string pass=2;
+}
+
+message TeamData {
+    int64 id = 1;
+    string name = 2;
+    string head = 3;
+    string score = 4;
+}
+
+message TeamMemberData {
+    string name = 1;
+    string number = 2;
+    int64 id=3;
+    string head=4;
+    int64 uid=5;
+}
+
+message GetLiveData {
+    int64 id = 1;
+    string address = 2;
+    int64 start = 3;
+    int64 end = 4;
+    int64 status = 5;
+    TeamData home = 6;
+    TeamData visiting = 7;
+    string home_score = 8;
+    string visiting_score = 9;
+    int64 type = 10;
+    repeated ScoreData info = 11;
+    int64 number=12;
+    repeated int64 user=13;
+}
+
+message GetLiveDataResponse {
+    repeated GetLiveDataResult list = 1;
+}
+
+message GetLiveDataResult {
+    repeated GetLiveData list = 1;
+    int64 type = 2;
+}
+
+message CreateLiveRequest {
+    int64 type = 1;
+    int64 uid = 2;
+    string address = 3;
+    int64 start = 4;
+    string home = 5;
+    string visiting = 6;
+    repeated TeamMemberData homeMember = 7;
+    repeated TeamMemberData visitingMember = 8;
+    int64 class_id = 9;
+    int64 match_id = 10;
+    int64 package_id=11;
+}
+
+message StartLivRequest {
+    int64 id = 1;
+    string pass = 2;
+    int64 uid = 3;
+    string address = 4;
+}
+
+
+message EndLivRequest {
+    int64 id = 1;
+    int64 uid = 2;
+}
+
+message StartLivResponse{
+    string address=1;
+    int64 id=2;
+    int64 end=3;
+}
+
+message ScoreData{
+    int64 id=1;
+    string time=2;
+    bool isHome=3;
+    TeamMemberData data=4;
+}
+message UpdateScoreRequest {
+    int64 id = 1;
+    string home_score = 2;
+    string visiting_score = 3;
+    repeated ScoreData list=4;
+}
+
+message WatchLiveRequest {
+    int64 id = 1;
+    int64 uid = 2;
+    string pass=3;
+}
+
+
+message PackageData{
+    int64 id=1;
+    string name=2;
+    int64 max=3;
+    int64 duration=4;
+    int64 price=5;
+    int64 sku_id=6;
+}
+
+message PackageDataResponse{
+    repeated PackageData list = 1;
+}
+
+message TeamMemberRequest{
+    int64 id=1;
+}
+
+message TeamMemberResponse{
+    repeated TeamMemberData homeMember = 1;
+    repeated TeamMemberData visitingMember = 2;
+}
+
+message LiveRequest{
+    int64 id=1;
+}
+
+

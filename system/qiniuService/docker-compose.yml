@@ -1,0 +1,26 @@
+version: "3"
+services:
+  qiniu_service:
+    image: registry.cn-guangzhou.aliyuncs.com/mufe/qiniu_service:latest
+    env_file:
+      - ../../.env
+    environment:
+      - SERVICE_80_NAME=qiniu_service
+      - PORT=80
+      - SERVICE_TAGS=mufe_service
+      - AK=R9dOsVCzF_W1j-VJviELdZCqZ7s4oCZBdJi7zGHV
+      - SK=HJoYmqTHMYC6_N7nPUoloFxZdmtJYvXrUIDK2F5p
+    ports:
+      - "80"
+    networks:
+     - micro
+
+
+networks:
+  micro:
+    external:
+      name: mufe_service_micro
+
+
+
+

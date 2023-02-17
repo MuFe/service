@@ -1,0 +1,107 @@
+syntax = "proto3";
+package app;
+
+
+message EmptyRequest{
+
+}
+
+
+message EmptyResponse{
+
+}
+
+message TagData{
+    int64 id=1;
+    string title=2;
+    string content=3;
+    string cover=4;
+}
+
+message good_specifications_info{
+    int64 id=1;
+    string name=2;
+    repeated good_specifications_value list=3;
+    int64 categoryId = 4;
+}
+
+message good_specifications_value{
+    int64 id=1;
+    string content=2;
+    bool isSelect=3;
+}
+
+
+message DeliveryData {
+    int64 id = 1;
+    int64 default_num = 2;
+    int64 default_price = 3;
+    int64 increase_num = 4;
+    int64 increase_price = 5;
+    string name = 6;
+    int64 type = 7;
+}
+
+
+
+
+message Sku {
+    int64 sku_id=1;
+    string sku_number=2;
+    string sku_name=3;
+    int64 price = 4;
+    int64 agreement_price = 5;
+    int64 cost_price = 6;
+    int64 member_price = 7;
+    int64 stock=8;//库存
+    int64 sales=9;//销量
+    int64 status=10;
+    repeated SkuOption options=11;
+    bool is_del=12;
+}
+
+message SkuOption{
+    int64 option_id=1;
+    string option_value=2;
+    int64 option_value_id=3;
+    string uuid=4;
+    int64 spu_id=5;
+}
+
+message PhotoInfo{
+    string key=1;
+    string url=2;
+}
+
+message Spu {
+    int64 id = 1;
+    SpuSku normal=2;
+    SpuSku member=3;
+    string name = 4;
+    string photo = 5;
+    int64 sales = 6;//销量
+    int64 stock = 7;//库存
+    int64 status=8;
+    bool sale_status=9;
+    int64 create_time=10;
+    int64 modify_time=11;
+    int64 business_id=12;
+    string brand_name=13;
+    int64 category_id=14;
+    string category_name=15;
+}
+
+
+message SpuSku{
+    int64 sku_id = 1;
+    int64 price = 2;
+    int64 cost_price = 3;
+    int64 member_price = 4;
+    int64 agreement_price = 5;
+    string name=6;
+    string key=7;
+    string photo=8;
+    int64 num=9;
+    int64 spu_id=10;
+    string spu_name=11;
+}

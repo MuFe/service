@@ -1,0 +1,23 @@
+syntax = "proto3";
+package app;
+
+service SendSmsService {
+    //检查通道连接
+    rpc send_sms(SendRequest) returns(SendResponse);
+}
+
+
+message SendRequest{
+    string phone=1;
+    string paramStr=2;
+    string sing_name=3;
+    string template_code=4;
+    string key_id=5;
+    string key=6;
+}
+
+message SendResponse{
+    string result=1;
+}
+
+

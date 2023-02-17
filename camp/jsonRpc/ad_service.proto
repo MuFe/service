@@ -1,0 +1,46 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service AdService {
+    //检查通道连接
+    rpc getAds (AdServiceRequest) returns (AdServicesResponse); //获取商城广告
+    rpc editAd (editAdRequest) returns (editAdResponse);
+    rpc delAd (editAdRequest) returns (EmptyResponse);
+    rpc editAdSort (editAdRequest) returns (EmptyResponse);
+    rpc editAdPhoto (editAdRequest) returns (EmptyResponse);
+}
+
+
+message AdServiceRequest {
+    int64 status = 1;
+    int64 id=2;
+}
+
+message AdServiceResponse {
+    string url = 1; //广告图片地址
+    int64 id = 2; //广告id
+    int64 type = 3;
+    int64 status = 5;
+    string photo = 6;
+    int64 link_id = 7; //链接id
+    int64 sort = 8; //链接id
+}
+message AdServicesResponse {
+    repeated AdServiceResponse result = 2; //广告列表
+}
+
+
+message editAdRequest {
+    int64 id = 1;
+    string key = 2;
+    string prefix = 3;
+    int64 type = 4;
+    int64 link_id = 5;
+    string url = 6;
+    int64 sort=7;
+    int64 status=8;
+}
+
+message editAdResponse{
+    int64 id = 1;
+}

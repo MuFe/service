@@ -1,0 +1,29 @@
+CREATE TABLE `qz_origin` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '创始名称',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '标题',
+  `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '副标题',
+  `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '图片',
+  `prefix` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '前缀',
+  `info` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '简介',
+  `info_title` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '简介标题',
+  `certificate` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '证书标题',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+CREATE TABLE `qz_origin_auth_photo` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cover` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '图片地址',
+  `prefix` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '图片前缀',
+  `oid` int NOT NULL COMMENT '创始id',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+
+ALTER TABLE qz_course add origin_id INT NOT NULL DEFAULT '0'
+ALTER TABLE qz_course add bg varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT ''
+ALTER TABLE qz_course add bg_prefix varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT ''
+ALTER TABLE qz_homework_info add `level` tinyint(1)  NOT NULL DEFAULT '1' COMMENT '等级',
+ALTER TABLE qz_level add `type` tinyint(1)  NOT NULL DEFAULT '1' COMMENT '类别，1为课程等级，2为小动作等级',
+alter table qz_origin modify column info text  NOT NULL COMMENT '简介'

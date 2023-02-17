@@ -1,0 +1,155 @@
+syntax = "proto3";
+import "data.proto";
+package app;
+service UserService {
+    //检查通道连接
+    rpc login(LoginRequest) returns(UserDataResponse);
+    rpc register(LoginRequest) returns(UserDataResponse);
+    rpc updateUser(UpdateUserRequest) returns(UserDataResponse);
+    rpc batchModifyType(BatchModifyRequest) returns(EmptyResponse);
+    rpc address(AddressRequest) returns(AddressResponse);
+    rpc phoneCheck(PhoneCheckRequest) returns(PhoneCheckResponse);
+    rpc modifyOuth(ModifyOuthRequest) returns(EmptyResponse);
+    rpc getUserList(GetUserListRequest) returns(GetUserListResponse);
+    rpc cancel(cancelRequest) returns(EmptyResponse);
+    rpc enterCancel(enterCancelRequest) returns(EmptyResponse);
+    rpc findIdFromQuery (findUserFromQueryRequest) returns (findUserFromQueryResponse);
+}
+
+message LoginRequest{
+    int64 type=1;
+    string app_id=2;
+    string secret=3;
+    string code=4;
+    int64 outh_type=5;
+    string phone=6;
+    string pass=7;
+    string name=8;
+    string head=9;
+    bool isMiniPrograms=10;
+    string device=11;
+    int64 uid=12;
+    string sign=13;
+    string j_token=14;
+}
+
+message UserDataResponse {
+    string name = 1;
+    string head = 2;
+    string phone = 3;
+    int64 sex = 4;
+    int64 uid=5;
+    string open_id=6;
+    string no=7;
+    string invite_code=8;
+    int64 identity=9;
+    string sign=10;
+    string province=11;
+    string city=12;
+    string district=13;
+    bool haveWx=14;
+    bool havePass=15;
+    bool is_new=16;
+    bool cancelStatus=17;
+    int64 cancel_time=18;
+    int64 login_type=19;
+    string address=20;
+    int64 age=21;
+    string registration_id=22;
+    int64 login_time=23;
+}
+
+
+message UpdateUserRequest{
+    string phone=1;
+    string pass=2;
+    int64 uid=3;
+    int64 type=4;
+    int64 identity_type=5;
+    string new_pass=6;
+    string name=7;
+    string sign=8;
+    int64 sex=9;
+    string district=10;
+    string head=11;
+    int64 age=12;
+    string registration_id=13;
+    repeated int64 uid_list=14;
+}
+
+
+message PhoneCheckRequest{
+    string phone=1;
+    string device=2;
+}
+
+message PhoneCheckResponse{
+    int64 result=1;
+}
+
+message AddressRequest{
+    int64 id=1;
+    int64 type=2;
+}
+
+message AddressResponse{
+    repeated AddressData list=1;
+}
+
+message AddressData{
+    int64 id=1;
+    int64 pid=2;
+    string name=3;
+    string first=4;
+    string letter=5;
+    repeated AddressData list=6;
+}
+
+
+message ModifyOuthRequest{
+    string app_id=1;
+    string secret=2;
+    string code=3;
+    int64 outh_type=4;
+    int64 uid=5;
+    bool isUnbind=6;
+}
+
+
+message GetUserListRequest{
+    int64 page=1;
+    int64 size=2;
+    int64 status=3;
+    repeated int64 idList=4;
+    int64 cancel_type=5;
+}
+
+
+message GetUserListResponse{
+    repeated UserDataResponse list=1;
+    int64 total=2;
+}
+
+message cancelRequest{
+    int64 uid=1;
+}
+
+message enterCancelRequest{
+    repeated int64 list=1;
+}
+
+message findUserFromQueryRequest{
+    string query=1;
+    bool no=2;
+    bool phone=3;
+    bool name=4;
+}
+
+message findUserFromQueryResponse{
+    repeated int64 list=1;
+}
+
+message BatchModifyRequest{
+    repeated int64 list=1;
+    int64 type=2;
+}

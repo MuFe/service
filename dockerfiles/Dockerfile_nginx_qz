@@ -1,0 +1,3 @@
+FROM registry.cn-guangzhou.aliyuncs.com/mufe/nginx:nginx
+COPY port.pem /etc/nginx/port.pem
+COPY port.key /etc/nginx/port.key

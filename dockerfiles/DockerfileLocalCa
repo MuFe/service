@@ -1,0 +1,5 @@
+FROM registry.cn-guangzhou.aliyuncs.com/mufe/alpine:ca as prod
+WORKDIR /root/
+COPY --from=0 go/src/mufe_service/camp/cert .
+COPY --from=0 s .
+CMD ["./server"]
